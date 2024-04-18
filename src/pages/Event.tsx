@@ -4,6 +4,7 @@ import EventForm from '../components/EventForm'
 
 const Event: FC = () => {
   const [showModal, setShowModal] = useState<boolean>(false)
+  
   return (
     <div>
       <EventCalendar events={[]}/>

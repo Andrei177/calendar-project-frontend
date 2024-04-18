@@ -1,6 +1,6 @@
 export interface IEvent{
-    author: string;
-    guest: string;
+    id: number;
+    author_id: number;
     date: string;
     description: string;
 }
