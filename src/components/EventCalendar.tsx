@@ -11,12 +11,12 @@ interface EventCalendarProps{
 const EventCalendar: FC<EventCalendarProps> = ({events}) => {
   
     // const monthCellRender = (value: Dayjs) => {
-    // не нужна пока эта функция, она для вывода каких-то мероприятий с конкретном месяце, а не дне
+    // не нужна пока эта функция, она для вывода каких-то мероприятий в конкретном месяце, а не дне
     // }
   
-    const dateCellRender = (value: Dayjs) => {
-      const currentDateEvents = events.filter(event => event.date === formatDate(value.toDate()));
-
+    const dateCellRender = (value: Dayjs) => { // функция проходится по каждому дню и добавляет инфу в тот день где совпала дата мероприятия с датой ячейки в календаре
+      const currentDateEvents = events.filter(event => formatDate(new Date(event.date)) === formatDate(value.toDate()));
+      
       return (
         <ul className="events">
           {currentDateEvents.map((item, index) => (

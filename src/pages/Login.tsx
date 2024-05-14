@@ -2,15 +2,19 @@ import { FC, useEffect, useState } from 'react'
 import { useUser } from '../store/useUser'
 import { useAuth } from '../store/useAuth';
 import { IUser } from '../models/IUser';
-import { login, registration } from '../http/userAPI/userAPI';
+import { login, recovery, registration } from '../http/userAPI/userAPI';
 
 const Login: FC = () => {
 
-  const {email, password, setUserName, setPassword} = useUser();
+  const {email, password, setEmail, setPassword} = useUser();
+
   const setIsAuth = useAuth(state => state.setIsAuth);
+
   const [isRegistration, setIsRegistration] = useState<boolean>(true);
 
   const [isCorrect, setIsCorrect] = useState<boolean>(true);
+
+  const [showRecoveryBtn, setShowRecoveryBtn] = useState<boolean>(false);
 
   useEffect(() => {
     if(password.length < 7 && password.length){
@@ -18,6 +22,13 @@ const Login: FC = () => {
     }
     else setIsCorrect(true);
   }, [password])
+
+  const recoveryPassword = () => {
+    recovery(email)
+    .then(res => alert(res.message))
+    .catch(err => alert(err.response.message))
+    setShowRecoveryBtn(false);
+  }
 
 
   const authUser = () => {
@@ -31,14 +42,20 @@ const Login: FC = () => {
         console.log(res, "Ответ в компоненте Login при регистрации")
         setIsAuth(true)
       })
-      .catch(err => console.log(err, "ОШИБКА ПРИ РЕГИСТРАЦИИ ПОЛЬЗОВАТЕЛЯ"))
+      .catch(err => {
+        alert(err.response.data.message);
+        console.log(err, "ОШИБКА ПРИ РЕГИСТРАЦИИ ПОЛЬЗОВАТЕЛЯ");
+      })
     }else{
       login(user)
       .then(res => {
         console.log(res, "Ответ при логине");
         setIsAuth(true);
       })
-      .catch(err => console.log(err, "ОШИБКА ПРИ ЛОГИНЕ"))
+      .catch(err => {
+        alert(err.response.data.message);
+        console.log(err, "ОШИБКА ПРИ ЛОГИНЕ");
+      })
     }
   }
 
@@ -48,7 +65,7 @@ const Login: FC = () => {
         <input
         type="email"
         value={email}
-        onChange={(e) => setUserName(e.target.value)}
+        onChange={(e) => setEmail(e.target.value)}
         placeholder='Адрес электронной почты'
         className='login-inp'
         />
@@ -60,7 +77,7 @@ const Login: FC = () => {
         className='login-inp'
         />
         {
-          !isCorrect && <p style={{position: "absolute", bottom: 235}}>Пароль должен содержать больше 6 символов</p>
+          !isCorrect && <p  className="correct-message">Пароль должен содержать больше 6 символов</p>
         }
         <input
         type="button"
@@ -74,6 +91,8 @@ const Login: FC = () => {
           <h3>{isRegistration ? "Есть аккаунт?" : "Нет аккаунта?"}</h3>
           <p style={{textDecoration: 'underline', cursor: 'pointer'}} onClick={() => setIsRegistration(!isRegistration)}>{isRegistration ? "Авторизация" : "Регистрация"}</p>
         </div>
+        <div className={showRecoveryBtn?'hide':'forget-password'} onClick={() => setShowRecoveryBtn(true)}>Забыли пароль?</div>
+        <button className={showRecoveryBtn?'login-btn':'hide'} onClick={recoveryPassword}>Выслать новый пароль</button>
       </div>
   )
 }

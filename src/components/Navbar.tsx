@@ -1,13 +1,32 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { RoutesNames } from "../router/router";
 import { useAuth } from "../store/useAuth";
+import { jwtDecode } from "jwt-decode";
 import { useUser } from "../store/useUser";
 
 const Navbar: FC = () => {
   const navigate = useNavigate();
   const {isAuth, setIsAuth} = useAuth();
-  const email = useUser(state => state.email);
+  const {email, setEmail, setId} = useUser();
+
+  useEffect(() => {
+    const token: any = localStorage.getItem("token");
+
+    if(token){
+      const user: any = jwtDecode(token);
+      if(user){
+        setEmail(user.email);
+        setId(user.id);
+      }
+    }
+  }, [])
+
+  const goExit = () => {
+    setIsAuth(false);
+    localStorage.removeItem("token");
+  } 
+
   return (
     <div className="navbar">
         <div className="container">
@@ -19,7 +38,7 @@ const Navbar: FC = () => {
                   ?<li className="navbar-list__item">{email.substring(0, 15)}...</li>
                   :<li className="navbar-list__item">{email}</li>
                 }
-                <li className="navbar-list__item" onClick={() => setIsAuth(false)}>Выйти</li>
+                <li className="navbar-list__item" onClick={goExit}>Выйти</li>
             </ul>
             :<ul className="navbar-list">
                 <li className="navbar-list__item" onClick={() => navigate(RoutesNames.LOGIN)}>Логин</li>
