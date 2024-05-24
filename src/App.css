@@ -24,7 +24,7 @@ body,
 .navbar-list{
     list-style-type: none;
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
     margin: 0;
     padding: 15px 0px;
     gap: 20px;
@@ -207,6 +207,20 @@ body,
 }
 .selected{
     background-color: rgb(101, 101, 237) !important;
+}
+.date-info{
+    background-color: rgb(255, 255, 255);
+    border-radius: 15px;
+    padding: 0px 20px;
+    height: 600px;
+}
+.date-info__item{
+    padding: 0px 5px;
+    border-bottom: 3px solid green;
+}
+.date-info__items{
+    overflow-y: scroll;
+    height: 77%;
 }
 
 

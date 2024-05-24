@@ -14,7 +14,7 @@ export const useUser = create<UserState>(set => (
         id: 0,
         email: "",
         password: "",
-        setId: (newId: number) => set({id: newId}), 
+        setId: (newId: number) => set({id: newId}),
         setEmail: (newUserName: string) => set({email: newUserName}),
         setPassword: (newPassword: string) => set({password: newPassword}),
     }

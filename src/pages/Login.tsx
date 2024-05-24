@@ -3,10 +3,12 @@ import { useUser } from '../store/useUser'
 import { useAuth } from '../store/useAuth';
 import { IUser } from '../models/IUser';
 import { login, recovery, registration } from '../http/userAPI/userAPI';
+import { useNavigate } from 'react-router-dom';
+import { RoutesNames } from '../router/router';
 
 const Login: FC = () => {
 
-  const {email, password, setEmail, setPassword} = useUser();
+  const {email, password, setEmail, setPassword, id} = useUser();
 
   const setIsAuth = useAuth(state => state.setIsAuth);
 
@@ -26,13 +28,15 @@ const Login: FC = () => {
   const recoveryPassword = () => {
     recovery(email)
     .then(res => alert(res.message))
-    .catch(err => alert(err.response.message))
+    .catch(err => alert(err.response.data.message))
     setShowRecoveryBtn(false);
   }
 
+  const navigate = useNavigate();
 
   const authUser = () => {
     const user: IUser = {
+      id,
       email,
       password
     }
@@ -40,6 +44,7 @@ const Login: FC = () => {
       registration(user)
       .then(res => {
         console.log(res, "Ответ в компоненте Login при регистрации")
+        navigate(RoutesNames.EVENT)
         setIsAuth(true)
       })
       .catch(err => {
@@ -51,6 +56,7 @@ const Login: FC = () => {
       .then(res => {
         console.log(res, "Ответ при логине");
         setIsAuth(true);
+        navigate(RoutesNames.EVENT);
       })
       .catch(err => {
         alert(err.response.data.message);

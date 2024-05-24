@@ -1,6 +1,6 @@
 export interface IEvent{
     id: number;
     author_id: number;
-    date: string;
+    date: Date;
     description: string;
 }

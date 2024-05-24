@@ -1,8 +1,8 @@
 import { DatePicker } from 'antd'
 import { FC, useEffect, useState } from 'react'
 import { IUser } from '../models/IUser';
-import { getAllUsers } from '../http/userAPI/userAPI';
 import { createEvent } from '../http/calendarAPI/calendarAPI';
+import { useUsers } from '../store/useUsers';
 import { useUser } from '../store/useUser';
 
 interface EventFormProps{
@@ -20,29 +20,27 @@ const EventForm: FC<EventFormProps> = ({setShowModal}) => {
   const [date, setDate] = useState<Date>();
   const [showList, setShowList] = useState<boolean>(false);
   const [selectedUsers, setSelectedUsers] = useState<ISelectUser[]>([]); // состояние для хранения выбранных пользователей
-  const {id : author_id} = useUser();
-  
-  console.log(selectedUsers);
+  const {id: author_id} = useUser();
+  const {users} = useUsers();
 
   useEffect(() => {
-    getAllUsers()
-    .then(res => {
-      setSelectedUsers(res.users.map((user: IUser) => {
-        const selectUser: ISelectUser = {
-          ...user,
-          select: false
-        } 
-        return selectUser;
-      }))
-    })
-    .catch(err => console.log(err, 'Ошибка при получении всех пользователей'))
+    setSelectedUsers(users.map((user: IUser) => {
+      const selectUser: ISelectUser = {
+        ...user,
+        select: false
+      } 
+      return selectUser;
+      })
+    )
   }, [])
 
   const addEvent = () => {
     const invitedUsers: IUser[] = selectedUsers.filter(user => user.select === true);
-    if(!(description && date && author_id && invitedUsers)){
+
+    if(!(description && date && author_id && invitedUsers.length)){
       return alert("Вы не заполнили некоторые данные для создания мероприятия! Пожалуйста проверьте, что Вы выбрали дату, описание и пригласили пользователей");
     }
+
     createEvent({description, date, author_id, invitedUsers})
     .then((res) => {
       alert(res.message);
@@ -62,7 +60,11 @@ const EventForm: FC<EventFormProps> = ({setShowModal}) => {
         <hr style={{width: "100%"}}/>
 
         <h3>Дата события</h3>
-        <DatePicker onChange={(e: TypeEvent) => setDate(e.$d)}/>
+        <DatePicker onChange={(e: TypeEvent) => {
+          if(e?.$d){
+            setDate(e.$d);
+          }
+        }}/>
 
         <h3>Гости</h3>
         <button className="event-btn" style={{width: "70%"}} onClick={() => setShowList(!showList)}>Выбрать гостей</button>
