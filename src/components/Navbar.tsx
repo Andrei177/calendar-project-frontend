@@ -25,8 +25,8 @@ const Navbar: FC = () => {
               ?<li>
                 <ul style={{display: "flex", gap: 5, listStyleType: "none"}}>
                 {
-                  email.length > 15
-                  ?<li className="navbar-list__item">{email.substring(0, 15)}...</li>
+                  email.length > 12
+                  ?<li className="navbar-list__item">{email.substring(0, 12)}...</li>
                   :<li className="navbar-list__item">{email}</li>
                 }
                   <li className="navbar-list__item" onClick={goExit}>Выйти</li>
