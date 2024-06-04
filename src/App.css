@@ -77,6 +77,7 @@ body,
     justify-content: center;
     align-items: center;
     background-color: rgb(220, 231, 243);
+    position: relative;
 }
 
 
@@ -158,11 +159,11 @@ body,
     margin: 20px 0px;
 }
 .modal{
-    position: fixed;
-    top: 0%;
-    bottom: 0%;
-    right: 0%;
-    left: 0%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
     background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
