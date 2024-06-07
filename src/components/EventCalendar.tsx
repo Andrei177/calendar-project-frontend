@@ -4,12 +4,15 @@ import { IEvent } from '../models/IEvent'
 import { Dayjs } from 'dayjs';
 import { formatDate } from '../utils/formatDate';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../store/useUser';
 
 interface EventCalendarProps{
   events: IEvent[];
 }
 
 const EventCalendar: FC<EventCalendarProps> = ({events}) => {
+
+  const {id} = useUser();
   
     // const monthCellRender = (value: Dayjs) => {
     // не нужна пока эта функция, она для вывода каких-то мероприятий в конкретном месяце, а не дне
@@ -29,14 +32,14 @@ const EventCalendar: FC<EventCalendarProps> = ({events}) => {
       return (
         <ul className="events" onClick={() => getDateInfo(currentDateEvents[0].date)}>
           {currentDateEvents.map((item, index) => (
-            <li key={index}>
+            <li className='events-item' key={index} style={item.author_id === id ?{backgroundColor: "rgb(16, 232, 8)"}:{}}>
               {item.description}
             </li>
           ))}
         </ul>
       );
     };
-  
+    
     const cellRender: CalendarProps<Dayjs>['cellRender'] = (current, info) => {
       if (info.type === 'date') return dateCellRender(current);
       //if (info.type === 'month') return monthCellRender(current);

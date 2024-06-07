@@ -29,3 +29,9 @@ export const createEvent = async ({description, date, author_id, invitedUsers}: 
     )
     return data;
 }
+
+export const getUsersByEvent = async (eventsIds: number[]) => {
+    const {data} = await $host.post("/calendar/users", {eventsIds});
+
+    return data;
+}
