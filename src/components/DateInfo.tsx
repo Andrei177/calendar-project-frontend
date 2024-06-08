@@ -44,7 +44,7 @@ const DateInfo: FC = () => {
         <div className='date-info__items'>
           {
           events.filter(event => formatDate(new Date(event.date)) === formatDate(new Date(date))).filter(e => e.author_id !== id).map(filteredEvent => {
-                  return <h2 className='date-info__item' key={filteredEvent.id}>{filteredEvent.description}<br/>
+                  return <h2 className='date-info__item' key={filteredEvent.id}>{filteredEvent.description}<hr/>
                     Автор: {users.find(user => user.id == filteredEvent.author_id)?.email}</h2>
               })
           }
@@ -56,7 +56,7 @@ const DateInfo: FC = () => {
       <div className='date-info__items'>
         {
         events.filter(event => formatDate(new Date(event.date)) === formatDate(new Date(date))).filter(e => e.author_id === id).map(filteredEvent => {
-              return <h2 className='date-info__item' key={filteredEvent.id}>{filteredEvent.description}<br/>
+              return <h2 className='date-info__item' key={filteredEvent.id}>{filteredEvent.description}<hr/>
                 Приглашенные гости: {usersByEvent.filter(item => item.eventId === filteredEvent.id).map(user => <div key={nanoid()}> {users.find(userItem => userItem.id === user.userId)?.email} </div>)}</h2>
           })
         }

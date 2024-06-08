@@ -134,15 +134,18 @@ body,
         width: 200px;
     }
 }
-.correct-message{
+.correct-message, .correct-message-email{
     position: absolute;
-    top: 60px;
+    top: 45px;
     right: 7px;
     background: white;
     border-radius: 5px;
     border: 1px solid blue;
     box-shadow: 3px 4px 20px;
     padding: 15px;
+}
+.correct-message-email{
+    top: 100px;
 }
 .forget-password{
     text-decoration: underline;

@@ -14,16 +14,18 @@ const Login: FC = () => {
 
   const [isRegistration, setIsRegistration] = useState<boolean>(true);
 
-  const [isCorrect, setIsCorrect] = useState<boolean>(true);
+  const [isCorrectPassword, setIsCorrectPassword] = useState<boolean>(true);
+  const [isCorrectEmail, setIsCorrectEmail] = useState<boolean>(true);
 
   const [showRecoveryBtn, setShowRecoveryBtn] = useState<boolean>(false);
 
   useEffect(() => {
     if(password.length < 7 && password.length){
-      setIsCorrect(false);
+      setIsCorrectPassword(false);
     }
-    else setIsCorrect(true);
-  }, [password])
+    else setIsCorrectPassword(true);
+    checkEmail();
+  }, [password, email])
 
   const recoveryPassword = () => {
     recovery(email)
@@ -65,6 +67,14 @@ const Login: FC = () => {
     }
   }
 
+  const checkEmail = () => {
+    if(!email.match(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/) && email){
+      setIsCorrectEmail(false);
+    }
+    else{
+      setIsCorrectEmail(true);
+    }
+  }
   return (
       <div className='login-form'>
         <h2 className='login-title'>{isRegistration ? "Регистрация" : "Авторизация"}</h2>
@@ -82,16 +92,15 @@ const Login: FC = () => {
         placeholder='Пароль'
         className='login-inp'
         />
-        {
-          !isCorrect && <p  className="correct-message">Пароль должен содержать больше 6 символов</p>
-        }
+        {!isCorrectPassword && <p className="correct-message">Пароль должен содержать больше 6 символов</p>}
+        {!isCorrectEmail && <p className="correct-message-email">Некорректный email</p>}
         <input
         type="button"
-        disabled={!isCorrect || email.length === 0 || password.length === 0}
+        disabled={!isCorrectPassword || !isCorrectEmail || email.length === 0 || password.length === 0}
         value={isRegistration ? "Зарегистрироваться" : "Войти"}
         className='login-btn'
         onClick={authUser}
-        style={{opacity: !isCorrect || email.length === 0 || password.length === 0 ? 0.5 : 1}}
+        style={{opacity: !isCorrectPassword || !isCorrectEmail || email.length === 0 || password.length === 0 ? 0.5 : 1}}
         />
         <div style={{textAlign: "center"}}>
           <h3>{isRegistration ? "Есть аккаунт?" : "Нет аккаунта?"}</h3>
